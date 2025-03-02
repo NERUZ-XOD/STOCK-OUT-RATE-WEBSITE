@@ -22,6 +22,7 @@ Installation
 Clone or Download the Repository
 If hosted in a repository, clone it to your local machine:
 
+[README.md](https://github.com/user-attachments/files/19042095/README.md)
 git clone https://github.com/NERUZ-XOD/STOCK-OUT-RATE-WEBSITE
 
 Otherwise, download the index.html and styles.css files directly.
@@ -45,7 +46,7 @@ To make the calculator fully functional, add a JavaScript file (script.js) with 
 <script src="script.js"></script>
 
 Here’s the JavaScript code to save as script.js:
-// Function to show/hide calculator sections
+'''javascript
 function showSection(section) {
     document.getElementById('averageRate').classList.add('hidden');
     document.getElementById('singleDayRate').classList.add('hidden');
