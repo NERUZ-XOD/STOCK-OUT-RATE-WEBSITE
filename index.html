@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Out Rate Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <button onclick="showSection('singleDayRate')">Single-Day Stock Out Rate</button>
+        <button onclick="showSection('averageRate')">Average Stock Out Rate</button>
+    </nav>
+    
+    <div id="singleDayRate" class="calculator-section">
+        <h1>Single-Day Stock Out Rate</h1>
+        <div class="input-group">
+            <label>Stock Outs</label>
+            <input type="number" id="stockOuts">
+        </div>
+        <div class="input-group">
+            <label>Total Demand</label>
+            <input type="number" id="totalDemand">
+        </div>
+        <button onclick="calculateSingleDayRate()">Calculate</button>
+        <h2 id="singleDayResult"></h2>
+        <h3>Calculation History</h3>
+        <ul id="history"></ul>
+    </div>
+    
+    <div id="averageRate" class="calculator-section hidden">
+        <h1>Average Stock Out Rate</h1>
+        <div class="label-container">
+            <label for="month">Select Month :  </label>
+            <select id="month" onchange="resetInput()">
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+            </select>
+        </div>
+        <div id="rateInput"></div>
+        <div id="resultsTable"></div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Neeraj M. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/_n_e_r_u_z_/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://github.com/NERUZ-XOD" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://x.com/NeruzXod7322" target="_blank"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://neerajm-official.netlify.app/" target="_blank"><i class="fas fa-globe"></i></a>
+        </div>
+    </footer>
+    
+    <script>
+        function showSection(section) {
+            document.getElementById('averageRate').classList.add('hidden');
+            document.getElementById('singleDayRate').classList.add('hidden');
+            document.getElementById(section).classList.remove('hidden');
+        }
+        
+        const daysInMonth = { 
+            January: 31, 
+            February: 28, 
+            March: 31, 
+            April: 30, 
+            May: 31, 
+            June: 30, 
+            July: 31, 
+            August: 31, 
+            September: 30, 
+            October: 31, 
+            November: 30, 
+            December: 31 
+        };
+        
+        let rates = [];
+        let currentDay = 1;
+
+        function resetInput() {
+            rates = [];
+            currentDay = 1;
+            document.getElementById('resultsTable').innerHTML = '';
+            enterDailyRates();
+        }
+
+        function enterDailyRates() {
+            const totalDays = daysInMonth[document.getElementById('month').value];
+            if (currentDay > totalDays) {
+                document.getElementById('rateInput').innerHTML = '<p>Month complete. Please reset to enter new data.</p>';
+                return;
+            }
+            
+            const rateInput = document.getElementById('rateInput');
+            rateInput.innerHTML = `
+                <div class="input-group">
+                    <label>Enter rate for Day ${currentDay}</label>
+                    <input type='number' id='dayRate'>
+                </div>`;
+            
+            let resetButton = document.createElement('button');
+            resetButton.innerText = 'Reset';
+            resetButton.onclick = resetInput;
+            
+            let backButton = document.createElement('button');
+            backButton.innerText = 'Back';
+            backButton.onclick = function() {
+                if (currentDay > 1) {
+                    rates.pop();
+                    currentDay--;
+                    enterDailyRates();
+                    updateTable();
+                }
+            };
+            
+            let nextButton = document.createElement('button');
+            nextButton.innerText = currentDay < totalDays ? 'Next' : 'Submit';
+            nextButton.onclick = function() {
+                submitDailyRate(totalDays);
+            };
+            
+            rateInput.appendChild(resetButton);
+            rateInput.appendChild(backButton);
+            rateInput.appendChild(nextButton);
+            
+            let inputField = document.getElementById('dayRate');
+            inputField.focus();
+            inputField.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    submitDailyRate(totalDays);
+                }
+            });
+        }
+
+        function submitDailyRate(totalDays) {
+            let inputField = document.getElementById('dayRate');
+            if (!inputField.value) {
+                alert('Please enter a value!');
+                return;
+            }
+            rates.push(parseFloat(inputField.value));
+            
+            if (currentDay < totalDays) {
+                currentDay++;
+                enterDailyRates();
+                updateTable();
+            } else {
+                updateTable();
+                enterDailyRates(); // Show completion message
+            }
+        }
+
+        function updateTable() {
+            const month = document.getElementById('month').value;
+            const totalDays = daysInMonth[month];
+            const tableDiv = document.getElementById('resultsTable');
+            let tableHTML = `
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Rate</th>
+                    </tr>`;
+            
+            // Only include valid days (up to totalDays for the selected month)
+            for (let i = 0; i < Math.min(rates.length, totalDays); i++) {
+                tableHTML += `
+                    <tr>
+                        <td>${month} ${i + 1}</td>
+                        <td>${rates[i].toFixed(2)}</td>
+                    </tr>`;
+            }
+            
+            if (rates.length > 0) {
+                const average = rates.reduce((a, b) => a + b, 0) / rates.length;
+                tableHTML += `
+                    <tr>
+                        <td>Average</td>
+                        <td>${average.toFixed(2)}</td>
+                    </tr>`;
+            }
+            
+            tableHTML += `</table>`;
+            tableDiv.innerHTML = tableHTML;
+        }
+
+        function calculateSingleDayRate() {
+            let stockOuts = parseFloat(document.getElementById('stockOuts').value);
+            let totalDemand = parseFloat(document.getElementById('totalDemand').value);
+            
+            if (!stockOuts || !totalDemand || totalDemand === 0) {
+                alert('Please enter valid values!');
+                return;
+            }
+            
+            let rate = (stockOuts / totalDemand) * 100;
+            document.getElementById('singleDayResult').innerText = 'Stock Out Rate: ' + rate.toFixed(2) + '%';
+            
+            let historyList = document.getElementById('history');
+            let listItem = document.createElement('li');
+            listItem.innerText = `Stock Outs: ${stockOuts}, Total Demand: ${totalDemand}, Rate: ${rate.toFixed(2)}%`;
+            historyList.appendChild(listItem);
+        }
+
+        document.getElementById('stockOuts').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculateSingleDayRate();
+            }
+        });
+        
+        document.getElementById('totalDemand').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculateSingleDayRate();
+            }
+        });
+
+        window.onload = resetInput;
+    </script>
+</body>
+</html>
