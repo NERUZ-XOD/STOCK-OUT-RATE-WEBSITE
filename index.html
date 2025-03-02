@@ -50,6 +50,10 @@
             </select>
         </div>
         <div id="rateInput"></div>
+        <!-- Reset button outside rateInput so it doesn't disappear -->
+        <button id="resetButton" onclick="resetInput()">Reset</button>
+        <!-- This will show the average value above the table -->
+        <div id="averageDisplay"></div>
         <div id="resultsTable"></div>
     </div>
     
@@ -142,13 +146,13 @@
                 }
             });
         }
-
         function submitDailyRate(totalDays) {
             let inputField = document.getElementById('dayRate');
             if (!inputField.value) {
                 alert('Please enter a value!');
                 return;
             }
+            
             rates.push(parseFloat(inputField.value));
             
             if (currentDay < totalDays) {
@@ -157,7 +161,10 @@
                 updateTable();
             } else {
                 updateTable();
-                enterDailyRates(); // Show completion message
+                document.getElementById('rateInput').innerHTML = '<p>Month complete. Please reset to enter new data.</p>';
+                
+                // Show the reset button after completion
+                document.getElementById('resetButton').style.display = 'block';
             }
         }
 
@@ -183,6 +190,9 @@
             
             if (rates.length > 0) {
                 const average = rates.reduce((a, b) => a + b, 0) / rates.length;
+                document.getElementById('averageDisplay').innerHTML = 
+                    `<p class="average-rate">Average : ${average.toFixed(2)}</p>`;
+
                 tableHTML += `
                     <tr>
                         <td>Average</td>
@@ -192,6 +202,15 @@
             
             tableHTML += `</table>`;
             tableDiv.innerHTML = tableHTML;
+        }
+        
+        function resetInput() {
+            rates = [];
+            currentDay = 1;
+            document.getElementById('resultsTable').innerHTML = '';
+            document.getElementById('averageDisplay').innerHTML = ''; // Clear average display
+            document.getElementById('resetButton').style.display = 'none'; // Hide reset button
+            enterDailyRates();
         }
 
         function calculateSingleDayRate() {
