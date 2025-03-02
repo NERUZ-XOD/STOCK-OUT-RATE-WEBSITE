@@ -116,9 +116,13 @@
             let resetButton = document.createElement('button');
             resetButton.innerText = 'Reset';
             resetButton.onclick = resetInput;
+            resetButton.classList.add('reset-button');
+            document.body.appendChild(resetButton);
             
             let backButton = document.createElement('button');
             backButton.innerText = 'Back';
+            backButton.classList.add('back-button');
+            document.body.appendChild(backButton);
             backButton.onclick = function() {
                 if (currentDay > 1) {
                     rates.pop();
