@@ -261,5 +261,3 @@ This project is licensed under the [MIT License](LICENSE) - see the `LICENSE` fi
 ## Acknowledgments
 - Inspired by inventory management needs for tracking stock out rates.
 - Built using standard HTML and styled with CSS, with optional JavaScript for enhanced functionality.
-```
-
