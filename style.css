@@ -11,7 +11,8 @@ body {
 
 nav {
     background-color: #333;
-    padding: 15px;
+    width: 100%;
+    padding: 15px 0;
     border-radius: 8px;
     margin-bottom: 20px;
     display: flex;
@@ -80,7 +81,7 @@ label {
     margin-right: 15px;
     font-size: 16px;
     min-width: 120px;
-    text-align: right;
+    text-align: left;
 }
 
 select, input[type="number"] {
@@ -152,11 +153,12 @@ tr:last-child td {
 
 footer {
     background-color: #333;
-    padding: 15px;
+    padding: 15px 0;
     border-radius: 8px;
     margin-top: auto;
     text-align: center;
     font-size: 14px;
+    width: 100%;
 }
 
 .social-links {
@@ -240,4 +242,15 @@ footer {
     color: #000000;
     transform: scale(1.05); /* Slightly increase button size */
     box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.8); /* Glowing effect */
+}
+.toggle-btn{
+    margin: auto;
+    margin-bottom: 20px;
+    width: 70%;
+}
+.reset-button{
+    margin-left: 0;
+}
+#calculate-button{
+    margin-left: 0%;
 }
