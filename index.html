@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="calculator.png">
 </head>
 <body>
     <nav>
@@ -25,10 +25,24 @@
             <label>Total Demand</label>
             <input type="number" id="totalDemand">
         </div>
-        <button onclick="calculateSingleDayRate()">Calculate</button>
+        <button id="calculate-button" onclick="calculateSingleDayRate()">Calculate</button>
         <h2 id="singleDayResult"></h2>
         <h3>Calculation History</h3>
         <ul id="history"></ul>
+    </div>
+    
+    <div id="calculationInfo" class="calculator-section hidden">
+        <h1>How the Calculation Works</h1>
+        <p>The stock out rate is a measure of how often an item is out of stock compared to the total demand.</p>
+        <h2>Formula:</h2>
+        <p><strong>Stock Out Rate (%) = (Stock Outs / Total Demand) × 100</strong></p>
+        <h2>Example:</h2>
+        <p>If there were 5 stock outs in a day and the total demand was 50, then:</p>
+        <p><strong>(5 / 50) × 100 = 10%</strong></p>
+        <p>This means the stock out rate for that day is 10%.</p>
+        <h2>Average Stock Out Rate:</h2>
+        <p>The average stock out rate over a period is calculated as:</p>
+        <p><strong>Sum of Daily Stock Out Rates / Number of Days</strong></p>
     </div>
     
     <div id="averageRate" class="calculator-section hidden">
@@ -57,7 +71,15 @@
         <div id="averageDisplay"></div>
         <div id="resultsTable"></div>
     </div>
-    
+    <button class="toggle-btn" onclick="toggleHowItWorks()">How To Calculate</button>
+    <div id="howItWorks" class="hidden">
+        <p><p style="color: rgb(74, 239, 74)"><strong>Single-Day Stock Out Rate:</strong></p> This is calculated using the formula:</p>
+        <p><code>Stock Out Rate (%) = (Stock Outs / Total Demand) * 100</code></p>
+        <p>It tells you how often a stock is unavailable when demanded on a single day.</p>
+        <p><p style="color: rgb(74, 239, 74);"><strong>Average Stock Out Rate:</strong></p>This is calculated as:</p>
+        <p><code>Average Stock Out Rate (%) = (Sum of Daily Stock Out Rates / Number of Days)</code></p>
+        <p>This gives an overview of stock availability over a period.</p>
+    </div>
     <footer>
         <p>&copy; 2025 Neeraj M. All rights reserved.</p>
         <div class="social-links">
@@ -74,7 +96,10 @@
             document.getElementById('singleDayRate').classList.add('hidden');
             document.getElementById(section).classList.remove('hidden');
         }
-        
+        function toggleHowItWorks() {
+            let howItWorks = document.getElementById('howItWorks');
+            howItWorks.classList.toggle('hidden');
+        }
         const daysInMonth = { 
             January: 31, 
             February: 28, 
